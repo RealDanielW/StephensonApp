@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd
 from datetime import timedelta, datetime
 
+hide_github_icon = """
+#GithubIcon {
+  visibility: hidden;
+}
+"""
+st.markdown(hide_github_icon, unsafe_allow_html=True)
 # Set page config
 st.set_page_config(page_title="Energy Dashboard", layout="wide")
 
