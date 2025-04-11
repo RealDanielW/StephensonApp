@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 st.markdown("""
 <style>div[data-testid="stToolbar"] { display: none;}</style>
 """, unsafe_allow_html=True)
+st.button("Hello world")
 
 # Set page config
 st.set_page_config(page_title="Energy Dashboard", layout="wide")
