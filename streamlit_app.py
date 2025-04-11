@@ -60,7 +60,7 @@ def get_quarterly_data(df):
 def format_with_commas(number):
     return f"{number:,}"
 
-def create_metric_chart(df, column, color, chart_type, height=150, time_frame='Quarter'):
+def create_metric_chart(df, column, color, chart_type, height=150, time_frame='Quarterly'):
     chart_data = df[[column]].copy()
     if time_frame == 'Quarterly':
         chart_data.index = chart_data.index.strftime('%Y Q%q ')
