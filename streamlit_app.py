@@ -91,18 +91,18 @@ def calculate_delta(df, column):
     delta_percent = (delta / previous_value) * 100 if previous_value != 0 else 0
     return delta, delta_percent
 
-#def display_metric(col, title, value, df, column, color, time_frame):
-   # with col:
-       # with st.container(border=True):
-            #delta, delta_percent = calculate_delta(df, column)
-            #delta_str = f"{delta:+,.0f} ({delta_percent:+.2f}%)"
-            #st.metric(title, format_with_commas(value), delta=delta_str)
-           # create_metric_chart(df, column, color, time_frame=time_frame, chart_type=chart_selection)
+def display_metric(col, title, value, df, column, color, time_frame):
+    with col:
+        with st.container(border=True):
+            delta, delta_percent = calculate_delta(df, column)
+            delta_str = f"{delta:+,.0f} ({delta_percent:+.2f}%)"
+            st.metric(title, format_with_commas(value), delta=delta_str)
+            create_metric_chart(df, column, color, time_frame=time_frame, chart_type=chart_selection)
             
-         #   last_period = df.index[-1]
-          #  freq = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M', 'Quarterly': 'Q'}[time_frame]
-          #  if not is_period_complete(last_period, freq):
-          #      st.caption(f"Note: The last {time_frame.lower()[:-2] if time_frame != 'Daily' else 'day'} is incomplete.")
+            last_period = df.index[-1]
+            freq = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M', 'Quarterly': 'Q'}[time_frame]
+            if not is_period_complete(last_period, freq):
+                st.caption(f"Note: The last {time_frame.lower()[:-2] if time_frame != 'Daily' else 'day'} is incomplete.")
 
 # Load data
 df = load_data()
@@ -152,7 +152,7 @@ metrics = [
 cols = st.columns(4)
 for col, (title, column, color) in zip(cols, metrics):
     total_value = df[column].sum()
-    #display_metric(col, title, total_value, df_display, column, color, time_frame)
+    display_metric(col, title, total_value, df_display, column, color, time_frame)
 
 st.subheader("Power Usage (KWH) Selected Duration")
 
@@ -164,10 +164,10 @@ else:
     mask = (df_display.index >= pd.Timestamp(start_date)) & (df_display.index <= pd.Timestamp(end_date))
 df_filtered = df_display.loc[mask]
 
-#cols = st.columns(4)
-#for col, (title, column, color) in zip(cols, metrics):
-#    display_metric(col, title.split()[-1], df_filtered[column].sum(), df_filtered, column, color, time_frame)
+cols = st.columns(4)
+for col, (title, column, color) in zip(cols, metrics):
+    display_metric(col, title.split()[-1], df_filtered[column].sum(), df_filtered, column, color, time_frame)
 
 # DataFrame display
-#with st.expander('See DataFrame (Selected time frame)'):
-#    st.dataframe(df_filtered)
+with st.expander('See DataFrame (Selected time frame)'):
+    st.dataframe(df_filtered)
