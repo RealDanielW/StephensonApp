@@ -143,7 +143,7 @@ elif time_frame == 'Quarterly':
 st.subheader("Power Usage (KWH) Statistics")
 
 metrics = [
-    ("Total Incoming KWH", "NET_SUBSCRIBER", '#29b5e8'),
+    ("Total Incoming KWH", "NET_SUBSCRIBERS", '#29b5e8'),
     ("URB Reactor 1 KWH", "VIEWS", '#FF9F36'),
     ("URB Reactor 2 KWH", "WATCH_HOURS", '#D45B90'),
     ("URB Reactor 5 KWH", "LIKES", '#7D44CF')
