@@ -140,7 +140,7 @@ elif time_frame == 'Quarterly':
     df_display = get_quarterly_data(df)
 
 # Display Key Metrics
-st.subheader("Power Usage (KWH) Statistics")
+st.subheader("Total Power Usage (KWH) Statistics")
 
 metrics = [
     ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
@@ -154,7 +154,7 @@ for col, (title, column, color) in zip(cols, metrics):
     total_value = df[column].sum()
     display_metric(col, title, total_value, df_display, column, color, time_frame)
 
-st.subheader("Selected Duration")
+st.subheader("Power Usage (KWH) Selected Duration")
 
 if time_frame == 'Quarterly':
     start_quarter = custom_quarter(start_date)
