@@ -8,7 +8,7 @@ st.set_page_config(page_title="Energy Dashboard", layout="wide")
 # Helper functions
 @st.cache_data
 def load_data():
-    data = pd.read_csv("youtube_channel_data.csv")
+    data = pd.read_csv("energydata.csv")
     data['DATE'] = pd.to_datetime(data['DATE'])
     data['TOTAL_KWH'] = data['R1_KWH'] + data['R2_KWH'] + data['R5_KWH']
     #data['TOTAL_KWH'] = data['SUBSCRIBERS_GAINED']
