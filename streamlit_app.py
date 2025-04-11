@@ -115,7 +115,7 @@ st.logo(image="images/stephenson.png",
       
 
 with st.sidebar:
-    st.title("Energy Dahboard")
+    st.title("Energy Dashboard")
     st.header("⚙️ Settings")
     
     max_date = df['DATE'].max().date()
@@ -140,13 +140,13 @@ elif time_frame == 'Quarterly':
     df_display = get_quarterly_data(df)
 
 # Display Key Metrics
-st.subheader("All-Time Statistics")
+st.subheader("Real Time Power Statistics")
 
 metrics = [
-    ("Total Subscribers", "NET_SUBSCRIBERS", '#29b5e8'),
-    ("Total Views", "VIEWS", '#FF9F36'),
-    ("Total Watch Hours", "WATCH_HOURS", '#D45B90'),
-    ("Total Likes", "LIKES", '#7D44CF')
+    ("Total Power KWH", "KWH", '#29b5e8'),
+    ("URB Reactor1 KWH", "KWH", '#FF9F36'),
+    ("URB Reactor2 KWH", "KWH", '#D45B90'),
+    ("URB Reactor5 KWH", "KWH", '#7D44CF')
 ]
 
 cols = st.columns(4)
