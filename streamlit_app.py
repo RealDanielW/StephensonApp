@@ -10,7 +10,8 @@ st.set_page_config(page_title="Energy Dashboard", layout="wide")
 def load_data():
     data = pd.read_csv("youtube_channel_data.csv")
     data['DATE'] = pd.to_datetime(data['DATE'])
-    data['TOTAL_KWH'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
+    #data['TOTAL_KWH'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
+    data['TOTAL_KWH'] = data['SUBSCRIBERS_GAINED']
     return data
 
 def custom_quarter(date):
