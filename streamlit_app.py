@@ -141,7 +141,7 @@ elif time_frame == 'Quarterly':
     df_display = get_quarterly_data(df)
 
 # Display Key Metrics
-st.subheader("Total Power Usage (KWH) Statistics")
+st.subheader("Total Power Usage (KWH)")
 
 metrics = [
     ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
