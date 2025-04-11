@@ -31,7 +31,7 @@ def aggregate_data(df, freq):
         df['CUSTOM_Q'] = df['DATE'].apply(custom_quarter)
         df_agg = df.groupby('CUSTOM_Q').agg({
             'R1_KWH': 'sum',
-            'WATCH_HOURS': 'sum',
+            'R2_KWH': 'sum',
             'TOTAL_KWH': 'sum',
             'LIKES': 'sum',
             'COMMENTS': 'sum',
@@ -41,7 +41,7 @@ def aggregate_data(df, freq):
     else:
         return df.resample(freq, on='DATE').agg({
             'R1_KWH': 'sum',
-            'WATCH_HOURS': 'sum',
+            'R2_KWH': 'sum',
             'TOTAL_KWH': 'sum',
             'LIKES': 'sum',
             'COMMENTS': 'sum',
@@ -145,7 +145,7 @@ st.subheader("Power Usage (KWH) Statistics")
 metrics = [
     ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
     ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
-    ("URB Reactor 2 KWH", "WATCH_HOURS", '#D45B90'),
+    ("URB Reactor 2 KWH", "R2_KWH", '#D45B90'),
     ("URB Reactor 5 KWH", "LIKES", '#7D44CF')
 ]
 
