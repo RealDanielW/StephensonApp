@@ -10,7 +10,7 @@ st.set_page_config(page_title="Energy Dashboard", layout="wide")
 def load_data():
     data = pd.read_csv("youtube_channel_data.csv")
     data['DATE'] = pd.to_datetime(data['DATE'])
-    data['NET_SUBSCRIBERS'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
+    data['NET_SUBSCRIBER'] = data['SUBSCRIBERS_GAINED'] - data['SUBSCRIBERS_LOST']
     return data
 
 def custom_quarter(date):
@@ -32,7 +32,7 @@ def aggregate_data(df, freq):
         df_agg = df.groupby('CUSTOM_Q').agg({
             'VIEWS': 'sum',
             'WATCH_HOURS': 'sum',
-            'NET_SUBSCRIBERS': 'sum',
+            'NET_SUBSCRIBER': 'sum',
             'LIKES': 'sum',
             'COMMENTS': 'sum',
             'SHARES': 'sum',
@@ -42,7 +42,7 @@ def aggregate_data(df, freq):
         return df.resample(freq, on='DATE').agg({
             'VIEWS': 'sum',
             'WATCH_HOURS': 'sum',
-            'NET_SUBSCRIBERS': 'sum',
+            'NET_SUBSCRIBER': 'sum',
             'LIKES': 'sum',
             'COMMENTS': 'sum',
             'SHARES': 'sum',
@@ -143,7 +143,7 @@ elif time_frame == 'Quarterly':
 st.subheader("Power Usage (KWH) Statistics")
 
 metrics = [
-    ("Total Incoming KWH", "NET_SUBSCRIBERS", '#29b5e8'),
+    ("Total Incoming KWH", "NET_SUBSCRIBER", '#29b5e8'),
     ("URB Reactor 1 KWH", "VIEWS", '#FF9F36'),
     ("URB Reactor 2 KWH", "WATCH_HOURS", '#D45B90'),
     ("URB Reactor 5 KWH", "LIKES", '#7D44CF')
