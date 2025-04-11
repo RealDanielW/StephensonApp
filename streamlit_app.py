@@ -115,7 +115,7 @@ st.logo(image="images/stephenson.png",
       
 
 with st.sidebar:
-    st.title("YouTube Channel Dashboard")
+    st.title("Energy Dahboard")
     st.header("⚙️ Settings")
     
     max_date = df['DATE'].max().date()
