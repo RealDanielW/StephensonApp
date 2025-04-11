@@ -108,9 +108,11 @@ def display_metric(col, title, value, df, column, color, time_frame):
 df = load_data()
 
 # Set up input widgets
-st.logo(image="images/streamlit-logo-primary-colormark-lighttext.png", 
-        icon_image="images/stephenson.png")
-       # icon_image="images/streamlit-mark-color.png")
+# st.logo(image="images/streamlit-logo-primary-colormark-lighttext.png", 
+# icon_image="images/streamlit-mark-color.png")
+st.logo(image="images/stephenson.png", 
+    icon_image="images/stephenson.png")
+      
 
 with st.sidebar:
     st.title("YouTube Channel Dashboard")
