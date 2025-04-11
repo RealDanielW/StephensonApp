@@ -146,7 +146,7 @@ st.subheader("Total Power Usage (KWH)")
 metrics = [
     ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
     ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
-    ("URB Reactor 2 KWH", "R2_KWH", '#FF9F36',
+    ("URB Reactor 2 KWH", "R2_KWH", '#FF9F36'),
     ("URB Reactor 5 KWH", "R5_KWH", '#FF9F36')
 
    # ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
