@@ -151,7 +151,7 @@ metrics = [
 
 cols = st.columns(4)
 for col, (title, column, color) in zip(cols, metrics):
-    total_value = df[column].sum()
+    Total_Power_KWH = df[column].sum()
     display_metric(col, title, total_value, df_display, column, color, time_frame)
 
 st.subheader("Selected Duration")
