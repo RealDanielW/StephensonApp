@@ -147,12 +147,17 @@ metrics = [
     ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
     ("URB Reactor 2 KWH", "R2_KWH", '#D45B90'),
     ("URB Reactor 5 KWH", "R5_KWH", '#7D44CF')
+
+   # ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
+   # ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
+   # ("URB Reactor 2 KWH", "R2_KWH", '#D45B90'),
+   # ("URB Reactor 5 KWH", "R5_KWH", '#7D44CF')
 ]
 
 cols = st.columns(4)
 for col, (title, column, color) in zip(cols, metrics):
     total_value = df[column].sum()
-    display_metric(col, title, total_value, df_display, column, color, time_frame)
+    #display_metric(col, title, total_value, df_display, column, color, time_frame)
 
 st.subheader("Power Usage (KWH) Selected Duration")
 
