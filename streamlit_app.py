@@ -140,13 +140,13 @@ elif time_frame == 'Quarterly':
     df_display = get_quarterly_data(df)
 
 # Display Key Metrics
-st.subheader("Real Time Power Statistics")
+st.subheader("Power Usage (KWH) Statistics")
 
 metrics = [
     ("Total Incoming KWH", "NET_SUBSCRIBERS", '#29b5e8'),
-    ("Reactor 1 KWH", "VIEWS", '#FF9F36'),
-    ("Total Watch Hours", "WATCH_HOURS", '#D45B90'),
-    ("Total Likes", "LIKES", '#7D44CF')
+    ("URB Reactor 1 KWH", "VIEWS", '#FF9F36'),
+    ("URB Reactor 2 KWH", "WATCH_HOURS", '#D45B90'),
+    ("URB Reactor 5 KWH", "LIKES", '#7D44CF')
 ]
 
 cols = st.columns(4)
