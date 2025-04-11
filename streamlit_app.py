@@ -169,5 +169,5 @@ df_filtered = df_display.loc[mask]
 #    display_metric(col, title.split()[-1], df_filtered[column].sum(), df_filtered, column, color, time_frame)
 
 # DataFrame display
-with st.expander('See DataFrame (Selected time frame)'):
-    st.dataframe(df_filtered)
+#with st.expander('See DataFrame (Selected time frame)'):
+#    st.dataframe(df_filtered)
