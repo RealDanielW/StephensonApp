@@ -110,7 +110,7 @@ df = load_data()
 # Set up input widgets
 # st.logo(image="images/streamlit-logo-primary-colormark-lighttext.png", 
 # icon_image="images/streamlit-mark-color.png")
-st.logo(image="images/stephensonlogo.PNG", 
+st.logo(image="images/stephensonlogo.PNG" 
     #icon_image="images/stephensonlogo.PNG")
       
 
