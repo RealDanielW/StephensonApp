@@ -63,7 +63,7 @@ st.markdown("""
 st.markdown('<div class="title-bar">', unsafe_allow_html=True)
 cols = st.columns([0.1, 0.3, 0.6])
 with cols[0]:
-    logo = Image.open("StephensonLogo.png")
+    logo = Image.open("images/StephensonLogo.png")
     st.image(logo, width=50)
 with cols[1]:
     st.markdown('<h3 style="color: #00a9e0;">Stephenson</h3>', unsafe_allow_html=True)
@@ -85,14 +85,14 @@ with left_col:
     st.markdown('<button class="menu-button">⬇️ Lower Tank Farm</button>', unsafe_allow_html=True)
 
     # User info
-    pfp = Image.open("UserPFP.png")
+    pfp = Image.open("images/UserPFP.png")
     st.image(pfp, width=40)
     st.markdown('<div class="user-info">FirstN LastN</div>', unsafe_allow_html=True)
 
     # Light/Dark mode toggle
     st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
-    light_icon = Image.open("LightMode.png")
-    dark_icon = Image.open("DarkMode.png")
+    light_icon = Image.open("images/LightMode.png")
+    dark_icon = Image.open("images/DarkMode.png")
     col1, col2 = st.columns([0.5, 0.5])
     with col1:
         st.image(light_icon, width=40)
