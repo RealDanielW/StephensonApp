@@ -1,143 +1,108 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
-from PyQt5.QtGui import QPixmap
+import streamlit as st
+from PIL import Image
 
-class MyWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Stephensons Tank Overview")
-        self.resize(1920, 1080)
-        self.setStyleSheet("background-color: #363c56;")
+# --- Custom CSS for styling ---
+st.markdown("""
+    <style>
+        body {
+            background-color: #363c56;
+        }
+        .title-bar {
+            background-color: #242839;
+            padding: 20px;
+            margin-bottom: 0;
+        }
+        .side-menu {
+            background-color: #2a2f45;
+            height: 100vh;
+            padding: 10px;
+        }
+        .menu-button {
+            background-color: #242839;
+            color: #00a9e0;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .menu-button:hover {
+            background-color: #575969;
+        }
+        .highlight-bar {
+            background-color: #00a9e0;
+            width: 5px;
+            height: 90px;
+            float: left;
+            margin-right: 10px;
+        }
+        .user-info {
+            color: #00a9e0;
+            font-size: 18px;
+            margin-top: 100px;
+        }
+        .mode-toggle {
+            background-color: #2a2f45;
+            border-radius: 20px;
+            padding: 5px 10px;
+            width: fit-content;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .mode-label {
+            color: #00a9e0;
+            font-size: 15px;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-        titleBackground = QLabel("", self)
-        titleBackground.setStyleSheet("background-color: #242839;")
-        titleBackground.setGeometry(0, 0, 1920, 80)
-        titleLabel = QLabel("Upper Tank Farm (UTF)", self)
-        titleLabel.setStyleSheet("background: transparent; color: #00a9e0; font-size: 26px; font: bold;")
-        titleLabel.setGeometry(300, 12, 370, 50)
+# --- Top bar with logo and title ---
+st.markdown('<div class="title-bar">', unsafe_allow_html=True)
+cols = st.columns([0.1, 0.3, 0.6])
+with cols[0]:
+    logo = Image.open("StephensonLogo.png")
+    st.image(logo, width=50)
+with cols[1]:
+    st.markdown('<h3 style="color: #00a9e0;">Stephenson</h3>', unsafe_allow_html=True)
+with cols[2]:
+    st.markdown('<h2 style="color: #00a9e0;">Upper Tank Farm (UTF)</h2>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-        menuLabel = QLabel("", self)
-        menuLabel.setStyleSheet("background-color: #2a2f45;")
-        menuLabel.setGeometry(0, 0, 280, 1080)
+# --- Main layout with sidebar ---
+left_col, right_col = st.columns([0.2, 0.8])
 
-        stephensonsLogo = QPixmap("StephensonLogo.png")
-        stephensonsLogo2 = QLabel("", self)
-        stephensonsLogo2.setStyleSheet("background-color: #2a2f45")
-        stephensonsLogo2.setGeometry(5, 13, 50, 50)
-        stephensonsLogo2.setPixmap(stephensonsLogo)
-        stephensonsLogo2.setScaledContents(True)
-        
-        stephensonsLabel = QLabel("Stephenson", self)
-        stephensonsLabel.setStyleSheet("color: #00a9e0; background: transparent; font-size: 24px;")
-        stephensonsLabel.setGeometry(70, 12, 370, 50)
+with left_col:
+    st.markdown('<div class="side-menu">', unsafe_allow_html=True)
 
-        seperateLine1 = QLabel("", self)
-        seperateLine1.setStyleSheet("background-color: #242839; border: none; border-radius: 3px;")
-        seperateLine1.setGeometry(17, 79, 243, 3)
+    # Upper Tank button
+    st.markdown('<div class="highlight-bar"></div>', unsafe_allow_html=True)
+    st.markdown('<button class="menu-button">⬆️ Upper Tank Farm</button>', unsafe_allow_html=True)
 
-        upperMenuButton = QPushButton("", self)
-        upperMenuButton.setStyleSheet("""
-            QPushButton {
-                background-color: #242839;
-                border: none;
-            }
-            QPushButton:hover {
-                background-color: #575969;
-            }
-            QPushButton:pressed {
-                background-color: #131728;
-                padding-top: 2px;
-                padding-left: 1px;
-            }
-        """)
-        upperMenuButton.setGeometry(5, 90, 274, 90)
+    # Lower Tank button
+    st.markdown('<button class="menu-button">⬇️ Lower Tank Farm</button>', unsafe_allow_html=True)
 
-        whitelineUPP = QLabel("", self)
-        whitelineUPP.setStyleSheet("background-color: #00a9e0;")
-        whitelineUPP.setGeometry(0, 90, 5, 90)
+    # User info
+    pfp = Image.open("UserPFP.png")
+    st.image(pfp, width=40)
+    st.markdown('<div class="user-info">FirstN LastN</div>', unsafe_allow_html=True)
 
-        upperMenuImage = QPixmap("ArrowUp.png")
-        upperMenuImage2 = QLabel("", self)
-        upperMenuImage2.setStyleSheet("background: transparent;")
-        upperMenuImage2.setGeometry(20, 110, 40, 40)
-        upperMenuImage2.setPixmap(upperMenuImage)
-        upperMenuImage2.setScaledContents(True)
+    # Light/Dark mode toggle
+    st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
+    light_icon = Image.open("LightMode.png")
+    dark_icon = Image.open("DarkMode.png")
+    col1, col2 = st.columns([0.5, 0.5])
+    with col1:
+        st.image(light_icon, width=40)
+    with col2:
+        st.image(dark_icon, width=40)
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="mode-label">Dark Mode</div>', unsafe_allow_html=True)
 
-        upperMenuText = QLabel("Upper Tank Farm", self)
-        upperMenuText.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px; font: bold;")
-        upperMenuText.setGeometry(80, 110, 400, 40)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        lowerMenuButton = QPushButton("", self)
-        lowerMenuButton.setStyleSheet("""
-            QPushButton {
-                background-color: #2a2f45;
-                border: none;
-            }
-            QPushButton:hover {
-                background-color: #575969;
-            }
-            QPushButton:pressed {
-                background-color: #131728;
-                padding-top: 2px;
-                padding-left: 1px;
-            }
-        """)
-        lowerMenuButton.setGeometry(5, 185, 274, 90)
-
-        lowerMenuImage = QPixmap("ArrowDown.png")
-        lowerMenuImage2 = QLabel("", self)
-        lowerMenuImage2.setStyleSheet("background: transparent;")
-        lowerMenuImage2.setGeometry(20, 207, 40, 40)
-        lowerMenuImage2.setPixmap(lowerMenuImage)
-        lowerMenuImage2.setScaledContents(True)
-
-        lowerMenuText = QLabel("Lower Tank Farm", self)
-        lowerMenuText.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px; font: bold;")
-        lowerMenuText.setGeometry(80, 207, 400, 40)
-
-        loggedInUser = QLabel("FirstN LastN", self)
-        loggedInUser.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px")
-        loggedInUser.setGeometry(80, 880, 400, 40)
-
-        LoggedInImage = QPixmap("UserPFP.png")
-        LoggedInImage2 = QLabel("", self)
-        LoggedInImage2.setStyleSheet("background: transparent;")
-        LoggedInImage2.setGeometry(20, 880, 40, 40)
-        LoggedInImage2.setPixmap(LoggedInImage)
-        LoggedInImage2.setScaledContents(True)
-
-        seperateLine2 = QLabel("", self)
-        seperateLine2.setStyleSheet("background-color: #242839; border: none; border-radius: 3px;")
-        seperateLine2.setGeometry(17, 930, 243, 3)
-
-        roundedOval = QLabel("", self)
-        roundedOval.setStyleSheet("background-color: #363c56; border: none; border-radius: 15px;")
-        roundedOval.setGeometry(150, 950, 100, 40)
-
-        roundedOval2 = QLabel("", self)
-        roundedOval2.setStyleSheet("background-color: #2a2f45; border: none; border-radius: 15px;")
-        roundedOval2.setGeometry(200, 952, 40, 37)
-
-        DarkModeImage = QPixmap("DarkMode.png")
-        DarkModeImage2 = QLabel("", self)
-        DarkModeImage2.setStyleSheet("background: transparent;")
-        DarkModeImage2.setGeometry(200, 950, 40, 40)
-        DarkModeImage2.setPixmap(DarkModeImage)
-        DarkModeImage2.setScaledContents(True)
-
-        LightModeImage = QPixmap("LightMode.png")
-        LightModeImage2 = QLabel("", self)
-        LightModeImage2.setStyleSheet("background: transparent;")
-        LightModeImage2.setGeometry(155, 950, 40, 40)
-        LightModeImage2.setPixmap(LightModeImage)
-        LightModeImage2.setScaledContents(True)
-
-        modeStatusLabel = QLabel("Dark Mode", self)
-        modeStatusLabel.setStyleSheet("background: transparent; color: #00a9e0; font-size: 15px;")
-        modeStatusLabel.setGeometry(50, 950, 90, 40)
-
-
-app = QApplication(sys.argv)
-window = MyWindow()
-window.show()
-sys.exit(app.exec_())
+with right_col:
+    st.markdown("<!-- Main content would go here -->")
+    st.markdown('<p style="color: #00a9e0;">Welcome to the Stephenson Tank Dashboard!</p>', unsafe_allow_html=True)
