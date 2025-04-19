@@ -1,108 +1,119 @@
 import streamlit as st
 from PIL import Image
 
-# --- Custom CSS for styling ---
+st.set_page_config(layout="wide")
+
+# --- Custom CSS ---
 st.markdown("""
     <style>
-        body {
-            background-color: #363c56;
-        }
-        .title-bar {
-            background-color: #242839;
-            padding: 20px;
-            margin-bottom: 0;
-        }
-        .side-menu {
-            background-color: #2a2f45;
-            height: 100vh;
-            padding: 10px;
-        }
-        .menu-button {
-            background-color: #242839;
-            color: #00a9e0;
-            font-weight: bold;
-            font-size: 18px;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        .menu-button:hover {
-            background-color: #575969;
-        }
-        .highlight-bar {
-            background-color: #00a9e0;
-            width: 5px;
-            height: 90px;
-            float: left;
-            margin-right: 10px;
-        }
-        .user-info {
-            color: #00a9e0;
-            font-size: 18px;
-            margin-top: 100px;
-        }
-        .mode-toggle {
-            background-color: #2a2f45;
-            border-radius: 20px;
-            padding: 5px 10px;
-            width: fit-content;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .mode-label {
-            color: #00a9e0;
-            font-size: 15px;
-        }
+    body {
+        background-color: #363c56;
+        color: #00a9e0;
+    }
+    .main-container {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        grid-template-rows: 80px 1fr;
+        grid-template-areas:
+            "sidebar header"
+            "sidebar main";
+        height: 100vh;
+    }
+    .header {
+        grid-area: header;
+        background-color: #242839;
+        padding: 15px 30px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .sidebar {
+        grid-area: sidebar;
+        background-color: #2a2f45;
+        padding: 20px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .main {
+        grid-area: main;
+        padding: 30px;
+    }
+    .menu-button {
+        width: 100%;
+        text-align: left;
+        background-color: #242839;
+        color: #00a9e0;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 15px;
+        margin: 10px 0;
+        border: none;
+        border-left: 5px solid #00a9e0;
+    }
+    .menu-button:hover {
+        background-color: #575969;
+    }
+    .user-section {
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .mode-toggle {
+        background-color: #2a2f45;
+        border-radius: 20px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .darkmode-label {
+        font-size: 15px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Top bar with logo and title ---
-st.markdown('<div class="title-bar">', unsafe_allow_html=True)
-cols = st.columns([0.1, 0.3, 0.6])
-with cols[0]:
-    logo = Image.open("images/StephensonLogo.png")
-    st.image(logo, width=50)
-with cols[1]:
-    st.markdown('<h3 style="color: #00a9e0;">Stephenson</h3>', unsafe_allow_html=True)
-with cols[2]:
-    st.markdown('<h2 style="color: #00a9e0;">Upper Tank Farm (UTF)</h2>', unsafe_allow_html=True)
+# --- HTML Layout ---
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
+# --- Sidebar ---
+st.markdown('<div class="sidebar">', unsafe_allow_html=True)
+
+logo = Image.open("images/StephensonLogo.png")
+st.image(logo, width=50)
+st.markdown('<h4 style="color:#00a9e0; margin-top: 5px;">Stephenson</h4>', unsafe_allow_html=True)
+
+# Menu buttons
+st.markdown('<button class="menu-button">⬆️ Upper Tank Farm</button>', unsafe_allow_html=True)
+st.markdown('<button class="menu-button">⬇️ Lower Tank Farm</button>', unsafe_allow_html=True)
+
+# Spacer and user
+pfp = Image.open("images/UserPFP.png")
+st.markdown('<div class="user-section">', unsafe_allow_html=True)
+st.image(pfp, width=40)
+st.markdown('<div>FirstN LastN</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- Main layout with sidebar ---
-left_col, right_col = st.columns([0.2, 0.8])
+# Dark/Light mode toggle
+light = Image.open("images/LightMode.png")
+dark = Image.open("images/DarkMode.png")
+st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
+col1, col2 = st.columns([1,1])
+with col1:
+    st.image(light, width=30)
+with col2:
+    st.image(dark, width=30)
+st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="darkmode-label">Dark Mode</div>', unsafe_allow_html=True)
 
-with left_col:
-    st.markdown('<div class="side-menu">', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # end sidebar
 
-    # Upper Tank button
-    st.markdown('<div class="highlight-bar"></div>', unsafe_allow_html=True)
-    st.markdown('<button class="menu-button">⬆️ Upper Tank Farm</button>', unsafe_allow_html=True)
+# --- Header ---
+st.markdown('<div class="header"><h3>Upper Tank Farm (UTF)</h3></div>', unsafe_allow_html=True)
 
-    # Lower Tank button
-    st.markdown('<button class="menu-button">⬇️ Lower Tank Farm</button>', unsafe_allow_html=True)
+# --- Main Content Placeholder ---
+st.markdown('<div class="main"><p>Welcome to the overview dashboard!</p></div>', unsafe_allow_html=True)
 
-    # User info
-    pfp = Image.open("images/UserPFP.png")
-    st.image(pfp, width=40)
-    st.markdown('<div class="user-info">FirstN LastN</div>', unsafe_allow_html=True)
-
-    # Light/Dark mode toggle
-    st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
-    light_icon = Image.open("images/LightMode.png")
-    dark_icon = Image.open("images/DarkMode.png")
-    col1, col2 = st.columns([0.5, 0.5])
-    with col1:
-        st.image(light_icon, width=40)
-    with col2:
-        st.image(dark_icon, width=40)
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('<div class="mode-label">Dark Mode</div>', unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with right_col:
-    st.markdown("<!-- Main content would go here -->")
-    st.markdown('<p style="color: #00a9e0;">Welcome to the Stephenson Tank Dashboard!</p>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # end main-container
