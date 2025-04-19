@@ -1,119 +1,211 @@
 import streamlit as st
 from PIL import Image
+import base64
 
 st.set_page_config(layout="wide")
 
-# --- Custom CSS ---
+# Load images
+logo = Image.open("images/StephensonLogo.png")
+arrow_up = Image.open("images/ArrowUp.png")
+arrow_down = Image.open("images/ArrowDown.png")
+pfp = Image.open("images/UserPFP.png")
+light_mode = Image.open("images/LightMode.png")
+dark_mode = Image.open("images/DarkMode.png")
+
+# --- CSS Styles ---
 st.markdown("""
     <style>
     body {
+        margin: 0;
         background-color: #363c56;
-        color: #00a9e0;
     }
-    .main-container {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        grid-template-rows: 80px 1fr;
-        grid-template-areas:
-            "sidebar header"
-            "sidebar main";
-        height: 100vh;
+    .container {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        background-color: #363c56;
     }
-    .header {
-        grid-area: header;
+    .title-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1920px;
+        height: 80px;
         background-color: #242839;
-        padding: 15px 30px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
+    }
+    .title-text {
+        position: absolute;
+        top: 12px;
+        left: 300px;
+        font-size: 26px;
+        font-weight: bold;
+        color: #00a9e0;
     }
     .sidebar {
-        grid-area: sidebar;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 1080px;
         background-color: #2a2f45;
-        padding: 20px 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
     }
-    .main {
-        grid-area: main;
-        padding: 30px;
+    .logo-img {
+        position: absolute;
+        top: 13px;
+        left: 5px;
+        width: 50px;
+        height: 50px;
     }
-    .menu-button {
-        width: 100%;
-        text-align: left;
-        background-color: #242839;
+    .stephenson-text {
+        position: absolute;
+        top: 12px;
+        left: 70px;
+        font-size: 24px;
         color: #00a9e0;
-        font-size: 18px;
-        font-weight: bold;
-        padding: 15px;
-        margin: 10px 0;
-        border: none;
-        border-left: 5px solid #00a9e0;
     }
-    .menu-button:hover {
+    .line1 {
+        position: absolute;
+        top: 79px;
+        left: 17px;
+        width: 243px;
+        height: 3px;
+        background-color: #242839;
+        border-radius: 3px;
+    }
+    .menu-btn {
+        position: absolute;
+        width: 274px;
+        height: 90px;
+        background-color: #242839;
+        border: none;
+        padding: 0;
+    }
+    .menu-btn:hover {
         background-color: #575969;
     }
-    .user-section {
-        margin-top: auto;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
+    .white-line {
+        position: absolute;
+        width: 5px;
+        height: 90px;
+        background-color: #00a9e0;
+        left: 0;
     }
-    .mode-toggle {
+    .arrow-img {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        left: 20px;
+    }
+    .menu-text {
+        position: absolute;
+        font-size: 18px;
+        font-weight: bold;
+        color: #00a9e0;
+        left: 80px;
+    }
+    .profile-name {
+        position: absolute;
+        font-size: 18px;
+        color: #00a9e0;
+        left: 80px;
+        top: 880px;
+    }
+    .pfp-img {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        left: 20px;
+        top: 880px;
+    }
+    .line2 {
+        position: absolute;
+        top: 930px;
+        left: 17px;
+        width: 243px;
+        height: 3px;
+        background-color: #242839;
+        border-radius: 3px;
+    }
+    .oval {
+        position: absolute;
+        width: 100px;
+        height: 40px;
+        top: 950px;
+        left: 150px;
+        background-color: #363c56;
+        border-radius: 15px;
+    }
+    .oval-inner {
+        position: absolute;
+        width: 40px;
+        height: 37px;
+        top: 952px;
+        left: 200px;
         background-color: #2a2f45;
-        border-radius: 20px;
-        padding: 5px 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        border-radius: 15px;
     }
-    .darkmode-label {
+    .dark-img {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 950px;
+        left: 200px;
+    }
+    .light-img {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        top: 950px;
+        left: 155px;
+    }
+    .mode-label {
+        position: absolute;
+        top: 950px;
+        left: 50px;
         font-size: 15px;
+        color: #00a9e0;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- HTML Layout ---
-st.markdown('<div class="main-container">', unsafe_allow_html=True)
+# --- Convert image to base64 for embedding ---
+def img_to_base64(img):
+    from io import BytesIO
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
 
-# --- Sidebar ---
-st.markdown('<div class="sidebar">', unsafe_allow_html=True)
+# --- HTML layout using your original positions ---
+st.markdown(f"""
+    <div class="container">
 
-logo = Image.open("images/StephensonLogo.png")
-st.image(logo, width=50)
-st.markdown('<h4 style="color:#00a9e0; margin-top: 5px;">Stephenson</h4>', unsafe_allow_html=True)
+        <div class="title-bar"></div>
+        <div class="sidebar"></div>
+        <img src="data:image/png;base64,{img_to_base64(logo)}" class="logo-img" />
+        <div class="stephenson-text">Stephenson</div>
+        <div class="title-text">Upper Tank Farm (UTF)</div>
+        <div class="line1"></div>
 
-# Menu buttons
-st.markdown('<button class="menu-button">⬆️ Upper Tank Farm</button>', unsafe_allow_html=True)
-st.markdown('<button class="menu-button">⬇️ Lower Tank Farm</button>', unsafe_allow_html=True)
+        <button class="menu-btn" style="top: 90px; left: 5px;">
+            <div class="white-line" style="top: 0;"></div>
+            <img src="data:image/png;base64,{img_to_base64(arrow_up)}" class="arrow-img" style="top: 20px;" />
+            <div class="menu-text" style="top: 25px;">Upper Tank Farm</div>
+        </button>
 
-# Spacer and user
-pfp = Image.open("images/UserPFP.png")
-st.markdown('<div class="user-section">', unsafe_allow_html=True)
-st.image(pfp, width=40)
-st.markdown('<div>FirstN LastN</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+        <button class="menu-btn" style="top: 185px; left: 5px; background-color: #2a2f45;">
+            <img src="data:image/png;base64,{img_to_base64(arrow_down)}" class="arrow-img" style="top: 22px;" />
+            <div class="menu-text" style="top: 27px;">Lower Tank Farm</div>
+        </button>
 
-# Dark/Light mode toggle
-light = Image.open("images/LightMode.png")
-dark = Image.open("images/DarkMode.png")
-st.markdown('<div class="mode-toggle">', unsafe_allow_html=True)
-col1, col2 = st.columns([1,1])
-with col1:
-    st.image(light, width=30)
-with col2:
-    st.image(dark, width=30)
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('<div class="darkmode-label">Dark Mode</div>', unsafe_allow_html=True)
+        <img src="data:image/png;base64,{img_to_base64(pfp)}" class="pfp-img" />
+        <div class="profile-name">FirstN LastN</div>
+        <div class="line2"></div>
 
-st.markdown('</div>', unsafe_allow_html=True)  # end sidebar
+        <div class="oval"></div>
+        <div class="oval-inner"></div>
+        <img src="data:image/png;base64,{img_to_base64(dark_mode)}" class="dark-img" />
+        <img src="data:image/png;base64,{img_to_base64(light_mode)}" class="light-img" />
+        <div class="mode-label">Dark Mode</div>
 
-# --- Header ---
-st.markdown('<div class="header"><h3>Upper Tank Farm (UTF)</h3></div>', unsafe_allow_html=True)
-
-# --- Main Content Placeholder ---
-st.markdown('<div class="main"><p>Welcome to the overview dashboard!</p></div>', unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)  # end main-container
+    </div>
+""", unsafe_allow_html=True)
