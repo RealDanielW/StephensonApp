@@ -1,180 +1,143 @@
-import streamlit as st
-import pandas as pd
-from datetime import timedelta, datetime
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
+from PyQt5.QtGui import QPixmap
 
-# Set page config
-st.set_page_config(page_title="Energy Dashboard", layout="wide")
+class MyWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Stephensons Tank Overview")
+        self.resize(1920, 1080)
+        self.setStyleSheet("background-color: #363c56;")
 
-# Helper functions
-@st.cache_data
-def load_data():
-    data = pd.read_csv("energydata.csv")
-    data['DATE'] = pd.to_datetime(data['DATE'])
-    data['TOTAL_KWH'] = data['R1_KWH'] + data['R2_KWH'] + data['R5_KWH']
-    #data['TOTAL_KWH'] = data['SUBSCRIBERS_GAINED']
-    return data
+        titleBackground = QLabel("", self)
+        titleBackground.setStyleSheet("background-color: #242839;")
+        titleBackground.setGeometry(0, 0, 1920, 80)
+        titleLabel = QLabel("Upper Tank Farm (UTF)", self)
+        titleLabel.setStyleSheet("background: transparent; color: #00a9e0; font-size: 26px; font: bold;")
+        titleLabel.setGeometry(300, 12, 370, 50)
 
-def custom_quarter(date):
-    month = date.month
-    year = date.year
-    if month in [2, 3, 4]:
-        return pd.Period(year=year, quarter=1, freq='Q')
-    elif month in [5, 6, 7]:
-        return pd.Period(year=year, quarter=2, freq='Q')
-    elif month in [8, 9, 10]:
-        return pd.Period(year=year, quarter=3, freq='Q')
-    else:  # month in [11, 12, 1]
-        return pd.Period(year=year if month != 1 else year-1, quarter=4, freq='Q')
+        menuLabel = QLabel("", self)
+        menuLabel.setStyleSheet("background-color: #2a2f45;")
+        menuLabel.setGeometry(0, 0, 280, 1080)
 
-def aggregate_data(df, freq):
-    if freq == 'Q':
-        df = df.copy()
-        df['CUSTOM_Q'] = df['DATE'].apply(custom_quarter)
-        df_agg = df.groupby('CUSTOM_Q').agg({
-            'R1_KWH': 'sum',
-            'R2_KWH': 'sum',
-            'TOTAL_KWH': 'sum',
-            'R5_KWH': 'sum',
-            'COMMENTS': 'sum',
-            'SHARES': 'sum',
-        })
-        return df_agg
-    else:
-        return df.resample(freq, on='DATE').agg({
-            'R1_KWH': 'sum',
-            'R2_KWH': 'sum',
-            'TOTAL_KWH': 'sum',
-            'R5_KWH': 'sum',
-            'COMMENTS': 'sum',
-            'SHARES': 'sum',
-        })
+        stephensonsLogo = QPixmap("StephensonLogo.png")
+        stephensonsLogo2 = QLabel("", self)
+        stephensonsLogo2.setStyleSheet("background-color: #2a2f45")
+        stephensonsLogo2.setGeometry(5, 13, 50, 50)
+        stephensonsLogo2.setPixmap(stephensonsLogo)
+        stephensonsLogo2.setScaledContents(True)
+        
+        stephensonsLabel = QLabel("Stephenson", self)
+        stephensonsLabel.setStyleSheet("color: #00a9e0; background: transparent; font-size: 24px;")
+        stephensonsLabel.setGeometry(70, 12, 370, 50)
 
-def get_weekly_data(df):
-    return aggregate_data(df, 'W-MON')
+        seperateLine1 = QLabel("", self)
+        seperateLine1.setStyleSheet("background-color: #242839; border: none; border-radius: 3px;")
+        seperateLine1.setGeometry(17, 79, 243, 3)
 
-def get_monthly_data(df):
-    return aggregate_data(df, 'M')
+        upperMenuButton = QPushButton("", self)
+        upperMenuButton.setStyleSheet("""
+            QPushButton {
+                background-color: #242839;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #575969;
+            }
+            QPushButton:pressed {
+                background-color: #131728;
+                padding-top: 2px;
+                padding-left: 1px;
+            }
+        """)
+        upperMenuButton.setGeometry(5, 90, 274, 90)
 
-def get_quarterly_data(df):
-    return aggregate_data(df, 'Q')
+        whitelineUPP = QLabel("", self)
+        whitelineUPP.setStyleSheet("background-color: #00a9e0;")
+        whitelineUPP.setGeometry(0, 90, 5, 90)
 
-def format_with_commas(number):
-    return f"{number:,}"
+        upperMenuImage = QPixmap("ArrowUp.png")
+        upperMenuImage2 = QLabel("", self)
+        upperMenuImage2.setStyleSheet("background: transparent;")
+        upperMenuImage2.setGeometry(20, 110, 40, 40)
+        upperMenuImage2.setPixmap(upperMenuImage)
+        upperMenuImage2.setScaledContents(True)
 
-def create_metric_chart(df, column, color, chart_type, height=150, time_frame='Quarterly'):
-    chart_data = df[[column]].copy()
-    if time_frame == 'Quarterly':
-        chart_data.index = chart_data.index.strftime('%Y Q%q ')
-    if chart_type=='Bar':
-        st.bar_chart(chart_data, y=column, color=color, height=height)
-    if chart_type=='Area':
-        st.area_chart(chart_data, y=column, color=color, height=height)
+        upperMenuText = QLabel("Upper Tank Farm", self)
+        upperMenuText.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px; font: bold;")
+        upperMenuText.setGeometry(80, 110, 400, 40)
 
-def is_period_complete(date, freq):
-    today = datetime.now()
-    if freq == 'D':
-        return date.date() < today.date()
-    elif freq == 'W':
-        return date + timedelta(days=6) < today
-    elif freq == 'M':
-        next_month = date.replace(day=28) + timedelta(days=4)
-        return next_month.replace(day=1) <= today
-    elif freq == 'Q':
-        current_quarter = custom_quarter(today)
-        return date < current_quarter
+        lowerMenuButton = QPushButton("", self)
+        lowerMenuButton.setStyleSheet("""
+            QPushButton {
+                background-color: #2a2f45;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #575969;
+            }
+            QPushButton:pressed {
+                background-color: #131728;
+                padding-top: 2px;
+                padding-left: 1px;
+            }
+        """)
+        lowerMenuButton.setGeometry(5, 185, 274, 90)
 
-def calculate_delta(df, column):
-    if len(df) < 2:
-        return 0, 0
-    current_value = df[column].iloc[-1]
-    previous_value = df[column].iloc[-2]
-    delta = current_value - previous_value
-    delta_percent = (delta / previous_value) * 100 if previous_value != 0 else 0
-    return delta, delta_percent
+        lowerMenuImage = QPixmap("ArrowDown.png")
+        lowerMenuImage2 = QLabel("", self)
+        lowerMenuImage2.setStyleSheet("background: transparent;")
+        lowerMenuImage2.setGeometry(20, 207, 40, 40)
+        lowerMenuImage2.setPixmap(lowerMenuImage)
+        lowerMenuImage2.setScaledContents(True)
 
-def display_metric(col, title, value, df, column, color, time_frame):
-    with col:
-        with st.container(border=True):
-            delta, delta_percent = calculate_delta(df, column)
-            delta_str = f"{delta:+,.0f} ({delta_percent:+.2f}%)"
-            #st.metric(title, format_with_commas(value), delta=delta_str)
-            st.metric(title, format_with_commas(value))
-            create_metric_chart(df, column, color, time_frame=time_frame, chart_type=chart_selection)
-            
-            last_period = df.index[-1]
-            freq = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M', 'Quarterly': 'Q'}[time_frame]
-            if not is_period_complete(last_period, freq):
-                st.caption(f"Note: The last {time_frame.lower()[:-2] if time_frame != 'Daily' else 'day'} is incomplete.")
+        lowerMenuText = QLabel("Lower Tank Farm", self)
+        lowerMenuText.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px; font: bold;")
+        lowerMenuText.setGeometry(80, 207, 400, 40)
 
-# Load data
-df = load_data()
+        loggedInUser = QLabel("FirstN LastN", self)
+        loggedInUser.setStyleSheet("background: transparent; color: #00a9e0; font-size: 18px")
+        loggedInUser.setGeometry(80, 880, 400, 40)
 
-# Set up input widgets
-# st.logo(image="images/streamlit-logo-primary-colormark-lighttext.png", 
-# icon_image="images/streamlit-mark-color.png")
-st.logo(image="images/stephensonlogo2.PNG",
-    icon_image="images/stephensonlogo2.PNG")
-      
+        LoggedInImage = QPixmap("UserPFP.png")
+        LoggedInImage2 = QLabel("", self)
+        LoggedInImage2.setStyleSheet("background: transparent;")
+        LoggedInImage2.setGeometry(20, 880, 40, 40)
+        LoggedInImage2.setPixmap(LoggedInImage)
+        LoggedInImage2.setScaledContents(True)
 
-with st.sidebar:
-    st.title("Energy Dashboard")
-    st.header("⚙️ Settings")
-    
-    max_date = df['DATE'].max().date()
-    default_start_date = max_date - timedelta(days=30)  # Show a year by default
-    default_end_date = max_date
-    start_date = st.date_input("Start date", default_start_date, min_value=df['DATE'].min().date(), max_value=max_date)
-    end_date = st.date_input("End date", default_end_date, min_value=df['DATE'].min().date(), max_value=max_date)
-    time_frame = st.selectbox("Select time frame",
-                              ("Daily", "Weekly", "Monthly", "Quarterly"),
-    )
-    chart_selection = st.selectbox("Select a chart type",
-                                   ("Bar", "Area"))
+        seperateLine2 = QLabel("", self)
+        seperateLine2.setStyleSheet("background-color: #242839; border: none; border-radius: 3px;")
+        seperateLine2.setGeometry(17, 930, 243, 3)
 
-# Prepare data based on selected time frame
-if time_frame == 'Daily':
-    df_display = df.set_index('DATE')
-elif time_frame == 'Weekly':
-    df_display = get_weekly_data(df)
-elif time_frame == 'Monthly':
-    df_display = get_monthly_data(df)
-elif time_frame == 'Quarterly':
-    df_display = get_quarterly_data(df)
+        roundedOval = QLabel("", self)
+        roundedOval.setStyleSheet("background-color: #363c56; border: none; border-radius: 15px;")
+        roundedOval.setGeometry(150, 950, 100, 40)
 
-# Display Key Metrics
-st.subheader("Total Power Usage (KWH)")
+        roundedOval2 = QLabel("", self)
+        roundedOval2.setStyleSheet("background-color: #2a2f45; border: none; border-radius: 15px;")
+        roundedOval2.setGeometry(200, 952, 40, 37)
 
-metrics = [
-    ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
-    ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
-    ("URB Reactor 2 KWH", "R2_KWH", '#FF9F36'),
-    ("URB Reactor 5 KWH", "R5_KWH", '#FF9F36')
+        DarkModeImage = QPixmap("DarkMode.png")
+        DarkModeImage2 = QLabel("", self)
+        DarkModeImage2.setStyleSheet("background: transparent;")
+        DarkModeImage2.setGeometry(200, 950, 40, 40)
+        DarkModeImage2.setPixmap(DarkModeImage)
+        DarkModeImage2.setScaledContents(True)
 
-   # ("Total Incoming KWH", "TOTAL_KWH", '#29b5e8'),
-   # ("URB Reactor 1 KWH", "R1_KWH", '#FF9F36'),
-   # ("URB Reactor 2 KWH", "R2_KWH", '#D45B90'),
-   # ("URB Reactor 5 KWH", "R5_KWH", '#7D44CF')
-]
+        LightModeImage = QPixmap("LightMode.png")
+        LightModeImage2 = QLabel("", self)
+        LightModeImage2.setStyleSheet("background: transparent;")
+        LightModeImage2.setGeometry(155, 950, 40, 40)
+        LightModeImage2.setPixmap(LightModeImage)
+        LightModeImage2.setScaledContents(True)
 
-cols = st.columns(4)
-for col, (title, column, color) in zip(cols, metrics):
-    total_value = df[column].sum()
-    display_metric(col, title, total_value, df_display, column, color, time_frame)
+        modeStatusLabel = QLabel("Dark Mode", self)
+        modeStatusLabel.setStyleSheet("background: transparent; color: #00a9e0; font-size: 15px;")
+        modeStatusLabel.setGeometry(50, 950, 90, 40)
 
-st.subheader("Power Usage (KWH) Selected Duration")
 
-if time_frame == 'Quarterly':
-    start_quarter = custom_quarter(start_date)
-    end_quarter = custom_quarter(end_date)
-    mask = (df_display.index >= start_quarter) & (df_display.index <= end_quarter)
-else:
-    mask = (df_display.index >= pd.Timestamp(start_date)) & (df_display.index <= pd.Timestamp(end_date))
-df_filtered = df_display.loc[mask]
-
-cols = st.columns(4)
-for col, (title, column, color) in zip(cols, metrics):
-    display_metric(col, title.split()[-1], df_filtered[column].sum(), df_filtered, column, color, time_frame)
-
-# DataFrame display
-#with st.expander('See DataFrame (Selected time frame)'):
-#    st.dataframe(df_filtered)
+app = QApplication(sys.argv)
+window = MyWindow()
+window.show()
+sys.exit(app.exec_())
